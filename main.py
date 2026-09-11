@@ -3,6 +3,13 @@ import time
 
 nums = []
 
+def input_int(prompt):
+    while True:
+        try:
+            return int(input(prompt))
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+
 def input_num():
     while True:
         try:
@@ -10,7 +17,12 @@ def input_num():
             if entry.lower() == 'done':
                 break
             if entry.lower() == 'random':
-                nums.extend([random.randint(1, 100) for _ in range(10)])
+                count = input_int("How many random numbers? ")
+                low = input_int("From: ")
+                high = input_int("To: ")
+                if low > high:
+                    low, high = high, low
+                nums.extend([random.randint(low, high) for _ in range(count)])
                 print("Random numbers generated:", nums)
                 break
             try:
