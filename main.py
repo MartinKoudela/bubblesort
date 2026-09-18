@@ -1,7 +1,7 @@
 import random
 import time
 
-# TODO: tkinter GUI for input and output, implement quicksort
+# TODO: tkinter GUI for input and output
 
 nums = []
 
@@ -39,38 +39,46 @@ def choose_sorting_algorithm():
     while True:
         try:
             choice = input_int("What sorting algorithm would you like to use? (1 for Bubble Sort, 2 for Quick Sort): ")
+            start = time.perf_counter()
             if choice == 1:
                 print("Bubble sort algorithm:")
                 bubble_sort(nums)
-                break
-            if choice == 2:
+            elif choice == 2:
                 print("Quick sort algorithm:")
-                quick_sort(nums)
-                break
+                quick_sort(nums, 0, len(nums) - 1)
+            else:
+                continue
+            end = time.perf_counter()
+            print(f"Sorted in {end - start:.4f} s")
+            break
         except KeyboardInterrupt:
             print("\nOperation cancelled by user.")
             break
 
 
 def bubble_sort(arr):
-    start = time.perf_counter()
     n = len(arr)
     for i in range(n):
         for j in range(0, n - i - 1):
             if arr[j] > arr[j + 1]:
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
-    end = time.perf_counter()
-    print(f"Bubble sort completed in {end - start:.4f} s")
 
 def quick_sort(arr, low, high):
-    start = time.perf_counter()
+    if low >= high:
+        return
 
+    pivot_index = random.randint(low, high)
+    arr[pivot_index], arr[high] = arr[high], arr[pivot_index]
+    pivot = arr[high]
+    i = low
+    for j in range(low, high):
+        if arr[j] <= pivot:
+            arr[i], arr[j] = arr[j], arr[i]
+            i += 1
 
-
-
-    end = time.perf_counter()
-    print(f"Quick sort completed in {end - start:.4f} s")
-
+    arr[i], arr[high] = arr[high], arr[i]
+    quick_sort(arr, low, i - 1)
+    quick_sort(arr, i + 1, high)
 
 input_num()
 
