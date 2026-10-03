@@ -1,4 +1,4 @@
-from backend.algorithms import ALGORITHMS, bubble_sort, quick_sort
+from backend.algorithms import ALGORITHMS, bubble_sort, merge_sort, quick_sort
 from backend.benchmark import SortResult, run_sort
 from backend.generator import generate_numbers
 
@@ -7,6 +7,7 @@ __all__ = [
     "SortResult",
     "bubble_sort",
     "generate_numbers",
+    "merge_sort",
     "quick_sort",
     "run_sort",
 ]
