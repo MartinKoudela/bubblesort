@@ -1,6 +1,11 @@
 import random
 
 
+# Bubble sort
+# Princip: prochází se pole a porovnávají se sousední prvky, když jsou ve
+# špatném pořadí, prohodí se. Po každém průchodu je největší prvek na konci.
+# Implementace: vnější cyklus počítá průchody, vnitřní jde jen po neseřazenou
+# část (n - i - 1), protože konec už je seřazený. Třídím přímo v poli.
 def bubble_sort(arr: list[int]) -> None:
     n = len(arr)
     for i in range(n):
@@ -9,6 +14,14 @@ def bubble_sort(arr: list[int]) -> None:
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
 
 
+# Quick sort
+# Princip: vybere se pivot a pole se rozdělí na prvky menší/rovné pivotu
+# (vlevo) a větší (vpravo). Pivot je pak na svém místě a stejně se rekurzivně
+# seřadí obě části.
+# Implementace: pivot volím náhodně, aby to nebylo pomalé na už seřazených
+# datech, a dám ho na konec úseku. Pak jdu přes úsek a menší prvky přehazuju
+# na začátek (index i). Nakonec pivot dám na pozici i a rekurzivně volám
+# funkci na levou a pravou část. low a high určují, jaký úsek se třídí.
 def quick_sort(arr: list[int], low: int = 0, high: int | None = None) -> None:
     if high is None:
         high = len(arr) - 1
@@ -29,6 +42,12 @@ def quick_sort(arr: list[int], low: int = 0, high: int | None = None) -> None:
     quick_sort(arr, i + 1, high)
 
 
+# Merge sort
+# Princip: pole se rozdělí na dvě poloviny, každá se rekurzivně seřadí
+# a pak se obě seřazené poloviny slijí dohromady.
+# Implementace: polovinu udělám přes slicing (left, right) a seřadím je.
+# Při slévání porovnávám left[i] a right[j] a menší zapíšu zpátky do arr[k].
+# Když jedna polovina dojde, zbytek druhé jen dokopíruju na konec.
 def merge_sort(arr: list[int]) -> None:
     if len(arr) <= 1:
         return
@@ -60,6 +79,12 @@ def merge_sort(arr: list[int]) -> None:
         k += 1
 
 
+# Selection sort
+# Princip: v neseřazené části se najde nejmenší prvek a dá se na její
+# začátek. Seřazená část tak roste zleva.
+# Implementace: pro každou pozici i hledám ve zbytku pole index nejmenšího
+# prvku (min_index) a pak ho prohodím s arr[i]. Poslední prvek už je
+# na místě sám, proto cyklus jde jen do n - 1.
 def selection_sort(arr: list[int]) -> None:
     n = len(arr)
     for i in range(n - 1):
@@ -70,9 +95,52 @@ def selection_sort(arr: list[int]) -> None:
         arr[i], arr[min_index] = arr[min_index], arr[i]
 
 
+# Insertion sort
+# Princip: pole se bere prvek po prvku a každý se vloží na správné místo do už seřazené části vlevo.
+# Implementace: aktuální prvek si uložím do key, pak posouvám větší prvky
+# ze seřazené části o jedno doprava, dokud nenajdu místo, kam key patří.
+# Začínám od indexu 1, protože jeden prvek je sám o sobě seřazený.
+def insertion_sort(arr: list[int]) -> None:
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+
+
+# Heap sort
+# Princip: z pole se udělá max-halda, největší prvek se prohodí na konec,
+# halda se zmenší o jedna a opraví se. Opakuje se, dokud halda nezmizí.
+# Implementace: děti prvku i jsou na 2 * i + 1 a 2 * i + 2. Vnořená funkce
+# heapify posouvá prvek dolů, dokud není větší než jeho děti.
+def heap_sort(arr: list[int]) -> None:
+    def heapify(size: int, root: int) -> None:
+        while True:
+            largest = root
+            for child in (2 * root + 1, 2 * root + 2):
+                if child < size and arr[child] > arr[largest]:
+                    largest = child
+            if largest == root:
+                return
+            arr[root], arr[largest] = arr[largest], arr[root]
+            root = largest
+
+    n = len(arr)
+    for i in range(n // 2 - 1, -1, -1):
+        heapify(n, i)
+
+    for end in range(n - 1, 0, -1):
+        arr[0], arr[end] = arr[end], arr[0]
+        heapify(end, 0)
+
+
 ALGORITHMS = {
     "Bubble Sort": bubble_sort,
     "Quick Sort": quick_sort,
     "Merge Sort": merge_sort,
     "Selection Sort": selection_sort,
+    "Insertion Sort": insertion_sort,
+    "Heap Sort": heap_sort,
 }
